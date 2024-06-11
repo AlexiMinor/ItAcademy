@@ -1,0 +1,19 @@
+﻿@model ArticleWithVisitorsModel
+@{
+    Layout = "_Layout";
+}
+
+<h1>
+    Articles
+</h1>
+<a asp-controller="Article" asp-action="TopArticles">Go to top</a>
+@if (Model.Articles.Any())
+{
+    foreach (var article in Model.Articles)
+    {
+        <partial name="_ArticleCardPreview" model="@article"/>
+
+    }
+}
+
+<pagination model="Model.Pagination"></pagination>

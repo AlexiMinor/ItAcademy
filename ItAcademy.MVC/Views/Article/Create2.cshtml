@@ -1,0 +1,37 @@
+﻿@model ArticleModel
+
+@* <form action="/article/create" method="post">
+    <div>
+        <label for="id"></label>
+        <input id="id" name="id" type="text" />
+    </div>
+    <div>
+        <label for="title"></label>
+        <input id="title" name="title" type="text" />
+    </div>
+    <div>
+        <label for="description"></label>
+        <textarea id="description" name="description"></textarea>
+    </div>
+    <div>
+        <label for="text"></label>
+        <textarea id="text" name="text"></textarea>
+    </div>
+    <button class="btn btn-primary">Submit</button>
+</form> *@
+
+@using (Html.BeginForm("Create", "Article", FormMethod.Post))
+{
+    @* @Html.EditorForModel()     *@
+
+    <div>
+        @Html.LabelFor(model => model.Id, 
+            "Non Id", 
+            new {@class ="label"})
+    </div>
+    <div>
+        @Html.TextBoxFor(model => model.Id)
+    </div>
+
+    <button class="btn btn-primary">Submit</button>
+}

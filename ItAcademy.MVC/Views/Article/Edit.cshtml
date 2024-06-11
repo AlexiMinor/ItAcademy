@@ -1,0 +1,33 @@
+﻿@model ArticleModel
+
+<form asp-action="Edit" asp-controller="Article" method="post">
+    <div>
+        <label asp-for="Id"></label>
+        <input asp-for="Id" />
+    </div>
+    <div>
+        <label asp-for="Title"></label>
+        <input asp-for="Title" />
+    </div>
+    <div>
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description"></textarea>
+    </div>
+    <div>
+        <label asp-for="Text"></label>
+        <textarea asp-for="Text"></textarea>
+    </div>
+    <div>
+        <label asp-for="PublicationDate"></label>
+        <input asp-for="PublicationDate" type="datetime" />
+    </div>
+    <div>
+        <label asp-for="Rate"></label>
+        <input asp-for="Rate" type="number" />
+    </div>
+    <div>
+        <label asp-for="SourceName"></label>
+        <input asp-for="SourceName" />
+    </div>
+    <button class="btn btn-primary">Submit</button>
+</form>

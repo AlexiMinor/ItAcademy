@@ -1,0 +1,13 @@
+﻿@model ArticleModel[]
+@{
+    Layout = "_Layout";
+}
+
+<h1>
+    Top 3 articles:
+</h1>
+
+@foreach (var article in Model)
+{
+    await Html.RenderPartialAsync("ArticleCard", article);
+}

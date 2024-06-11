@@ -1,0 +1,20 @@
+﻿@model ArticleModel
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Title - @Model.Id</h5>
+        
+        <div class="card-text">
+            <h6>Description</h6>
+            <p>@Model.Description</p>
+            
+            <h6>Text</h6>
+            <p>@Model.Text</p>
+        </div>
+
+        <a asp-action="Edit"  asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+    </div>
+    <div class="card-footer text-body-secondary">
+        by @Model.SourceName at @Model.PublicationDate
+    </div>
+</div>
