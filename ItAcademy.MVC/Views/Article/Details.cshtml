@@ -9,7 +9,7 @@
             <p>@Model.Description</p>
             
             <h6>Text</h6>
-            <p>@Model.Text</p>
+            @Html.Raw(Model.Text)
         </div>
 
         <a asp-action="Edit"  asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>

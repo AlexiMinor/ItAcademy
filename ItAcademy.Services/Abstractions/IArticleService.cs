@@ -10,4 +10,5 @@ public interface IArticleService
     Task<int> AddArticleAsync(Article article);
     Task<int> EditArticleAsync(Article updatedArticle);
     Task<int> GetArticlesCountAsync();
+    Task AggregateAsync();
 }

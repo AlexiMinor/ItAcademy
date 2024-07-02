@@ -7,6 +7,8 @@
     Articles
 </h1>
 <a asp-controller="Article" asp-action="TopArticles">Go to top</a>
+<a asp-action="Create" asp-controller="Article" class="btn btn-primary">Create</a>
+<a asp-action="Aggregate" asp-controller="Article" class="btn btn-primary">Aggregate</a>
 @if (Model.Articles.Any())
 {
     foreach (var article in Model.Articles)

@@ -1,4 +1,8 @@
-﻿using ItAcademy.Database;
+﻿using System.Diagnostics;
+using System.ServiceModel.Syndication;
+using System.Xml;
+using HtmlAgilityPack;
+using ItAcademy.Database;
 using ItAcademy.Database.Entities;
 using ItAcademy.Services.Abstractions;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +24,7 @@ public class ArticleService : IArticleService
     {
         //try
         //{
-            return await _context.Articles.Where(article => article!.Rate >= 1).ToArrayAsync();
+            return await _context.Articles/*.Where(article => article!.Rate >= 1)*/.ToArrayAsync();
         //}
         //catch (Exception e)
         //{
@@ -63,5 +67,102 @@ public class ArticleService : IArticleService
     public async Task<int> GetArticlesCountAsync()
     {
         return await _context.Articles.CountAsync();
+    }
+
+    public async Task AggregateAsync()
+    {
+        var sw = new Stopwatch();
+        sw.Start();
+        try
+        {
+            
+            var sources = await _context.Sources
+                .Where(source => !string.IsNullOrEmpty(source.RssUrl))
+                .ToArrayAsync();
+
+            //var tasks = new List<Task>();
+            var sw1 = new Stopwatch();
+            sw1.Start();
+            foreach (var s in sources)
+            {
+                await GetRssData(s);
+            }
+            sw1.Stop();
+            
+            var articles = await GetArticlesInfoWithoutText();
+
+            var sw2 = new Stopwatch();
+            sw2.Start();
+            foreach (var article in articles)
+            {
+                await UpdateText(article);
+            }
+            sw2.Stop();
+            sw.Stop();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        //get id from sources in dbContext
+        
+        //await Task.WhenAll(tasks);
+
+    }
+
+
+
+    private async Task GetRssData(Source? source)
+    {
+        if (source?.RssUrl != null)
+            using (var xmlReader = XmlReader.Create(source.RssUrl))
+            {
+                var syndicationFeed = SyndicationFeed.Load(xmlReader);
+                var existedArticleUrls = await _context.Articles
+                    .Select(article => article.OriginalUrl)
+                    .ToArrayAsync();
+                var articles = syndicationFeed.Items
+                    .Select(it => new Article()
+                    {
+                        Id = Guid.NewGuid(),
+                        Title = it.Title.Text,
+                        OriginalUrl = it.Id,
+                        Description = it.Summary?.Text,
+                        PublicationDate = it.PublishDate.DateTime,
+                        SourceId = source.Id
+                    }
+                ).ToArray();
+
+                var newUniqueArticles = articles
+                    .Where(article => !existedArticleUrls.Contains(article.OriginalUrl))
+                    .ToArray();
+                
+                await _context.Articles.AddRangeAsync(newUniqueArticles);
+                await _context.SaveChangesAsync();
+            }
+    }
+
+    private async Task<Article[]> GetArticlesInfoWithoutText()
+    {
+        return await _context.Articles.Where(article=>string.IsNullOrEmpty(article.Text)).ToArrayAsync();
+    }
+
+    private async Task UpdateText(Article article)
+    {
+        var web = new HtmlWeb();
+        var doc = web.Load(article.OriginalUrl);
+
+        var articleNode = doc.DocumentNode.SelectSingleNode("//div[@class='news-text']");
+        if (articleNode != null)
+        {
+            var existingArticle = await _context.Articles.FirstOrDefaultAsync(a => a.Id == article.Id);
+            if (existingArticle != null)
+            {
+                //can be inner html
+                existingArticle.Text = articleNode.InnerText.Trim();
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

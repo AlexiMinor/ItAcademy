@@ -1,9 +1,11 @@
 using ItAcademy.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using ItAcademy.MVC.Filters;
 
 namespace ItAcademy.MVC.Controllers
 {
+    //[TestResourceFilter]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -14,6 +16,10 @@ namespace ItAcademy.MVC.Controllers
         }
 
         [HttpGet]
+        //[TestResourceFilter(12, )]
+        [TypeFilter(typeof(TestResourceFilter), Arguments = [12])]
+        //[ServiceFilter(typeof(TestResourceFilter))]
+        [ResultFilter]
         public IActionResult Index()
         {
             _logger.LogInformation("hello");
@@ -21,6 +27,7 @@ namespace ItAcademy.MVC.Controllers
         }
 
         [HttpGet]
+        [CacheResourceFilter]
         public IActionResult Privacy()
         {
             return View();

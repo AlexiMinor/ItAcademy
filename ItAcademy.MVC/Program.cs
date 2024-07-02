@@ -1,5 +1,7 @@
 using System.Collections;
 using ItAcademy.Database;
+using ItAcademy.MVC.Filters;
+using ItAcademy.MVC.Middlewares;
 using ItAcademy.MVC.Models;
 using ItAcademy.Services;
 using ItAcademy.Services.Abstractions;
@@ -53,6 +55,14 @@ namespace ItAcademy.MVC
             builder.Services.AddTransient<ITransientService, TransientService>();
             builder.Services.AddScoped<IScopedService, ScopedService>();
             builder.Services.AddSingleton<ISingletonService, SingletonService>();
+            //builder.Services.AddScoped<TestResourceFilter>();
+
+            //builder.Services.AddControllersWithViews(opt =>
+            //{
+            //    //opt.Filters.Add(typeof(TestResourceFilter));
+            //    //opt.Filters.Add(new TestResourceFilter(12));
+            //    //opt.Filters.Add<TestResourceFilter>();
+            //});
 
             var app = builder.Build();
 
@@ -70,7 +80,9 @@ namespace ItAcademy.MVC
             app.UseRouting();
             app.UseSerilogRequestLogging();
             app.UseAuthorization();
-
+            //const string token = "123";
+            ////app.UseMiddleware<QuerySecurityCheckMiddleware>(token);
+            //app.UseQuerySecurity(token);
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");

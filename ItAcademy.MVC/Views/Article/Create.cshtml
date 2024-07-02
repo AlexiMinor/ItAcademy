@@ -3,35 +3,94 @@
 <form asp-action="Create" asp-controller="Article" method="post">
     <div>
         <div>
-            <label asp-for="Id">111</label>
+            <label asp-for="Id"></label>
         </div>
         <div>
-            <input asp-for="Id" />
+            <input required asp-for="Id" />
+        </div>
+        <div>
+            <span asp-validation-for="Id"></span>
         </div>
     </div>
     <div>
-        <label asp-for="Title"></label>
-        <input asp-for="Title" />
+        <div>
+            <label asp-for="Title"></label>
+        </div>
+        <div>
+            <input asp-for="Title" />
+        </div>
+        <div>
+            <span asp-validation-for="Title"></span>
+        </div>
     </div>
     <div>
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description"></textarea>
+
+        <div>
+            <label asp-for="Description"></label>
+        </div>
+        <div>
+            <textarea asp-for="Description"></textarea>
+        </div>
+        <div>
+            <span asp-validation-for="Description"></span>
+        </div>
     </div>
     <div>
-        <label asp-for="Text"></label>
-        <textarea asp-for="Text"></textarea>
+        <div>
+            <label asp-for="Text"></label>
+        </div>
+        <div>
+            <textarea asp-for="Text"></textarea>
+        </div>
+        <div>
+            <span asp-validation-for="Text"></span>
+        </div>
+
     </div>
     <div>
-        <label asp-for="PublicationDate"></label>
-        <input id="pub-date" class="m121212121" asp-for="PublicationDate" type="datetime" />
+        <div>
+            <label asp-for="PublicationDate"></label>
+        </div>
+        <div>
+            <input id="pub-date" class="m121212121" asp-for="PublicationDate" type="datetime" />
+        </div>
+        <div>
+            <span asp-validation-for="PublicationDate"></span>
+        </div>
     </div>
     <div>
-        <label asp-for="Rate"></label>
-        <input asp-for="Rate" type="number" />
+        <div>
+
+            <label asp-for="Rate"></label>
+        </div>
+        <div>
+            <input asp-for="Rate" type="number" />
+        </div>
+        <div>
+            <span asp-validation-for="Rate"></span>
+        </div>
     </div>
     <div>
-        <label asp-for="SourceName"></label>
-        <input asp-for="SourceName" />
-    </div> 
-    <button class="btn btn-primary">Submit</button>
+        <div>
+            <label asp-for="SourceName"></label>
+        </div>
+        <div>
+            <input asp-for="SourceName" />
+        </div>
+        <div>
+            <span asp-validation-for="SourceName"></span>
+        </div>
+
+    </div>
+    <div>
+        <button class="btn btn-primary">Submit</button>
+    </div>
 </form>
+
+
+@section Scripts
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

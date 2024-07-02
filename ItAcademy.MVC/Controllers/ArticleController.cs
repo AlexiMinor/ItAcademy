@@ -1,4 +1,5 @@
 ﻿using ItAcademy.Database.Entities;
+using ItAcademy.MVC.Filters;
 using ItAcademy.MVC.Models;
 using ItAcademy.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
@@ -57,6 +58,7 @@ public class ArticleController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
+            throw;
             return StatusCode(500, new { Message = e.Message });
         }
 
@@ -78,9 +80,16 @@ public class ArticleController : Controller
     public async Task<IActionResult> Create(ArticleModel model)
     {
         //add to database
-
-        await _articleService.AddArticleAsync(ConvertArticleModelToArticle(model));
-        return RedirectToAction("Index");
+        if (ModelState.IsValid)
+        {
+            await _articleService.AddArticleAsync(ConvertArticleModelToArticle(model));
+            return RedirectToAction("Index");
+        }
+        else
+        {
+            return View();
+            //return BadRequest(ModelState);
+        }
     }
 
     [HttpGet]
@@ -111,6 +120,7 @@ public class ArticleController : Controller
         return View(articles);
     }
 
+    [CheckId]
     public async Task<IActionResult> Details([FromRoute] Guid id, string str)
     {
         var article = ConvertArticleToArticleModel(
@@ -121,7 +131,7 @@ public class ArticleController : Controller
             article.Title = $"{article.Title} SECRET:{_configuration["AppSettings:SecretKey"]}";
         }
 
-        _configuration["ConnectionStrings:Default"] = "";
+        //_configuration["ConnectionStrings:Default"] = "";
         return View(article);
     }
 
@@ -130,6 +140,15 @@ public class ArticleController : Controller
     {
         Console.WriteLine("PV");
         return PartialView(model);
+    }
+
+
+    [HttpGet]
+    //todo temp solution, will reworked after JS 
+    public async Task<IActionResult> Aggregate()
+    {
+       await  _articleService.AggregateAsync();
+        return Ok();
     }
 
     //shouldn't be implemented in that way. Temp code, should be rewritten later
