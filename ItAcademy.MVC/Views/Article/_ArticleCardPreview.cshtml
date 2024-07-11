@@ -1,6 +1,6 @@
 ﻿@model ArticleModel
 
-<div>
+<div class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
     <div class="card">
         <div class="card-body">
             <h5 class="card-title">@Model.Title</h5>
@@ -8,7 +8,7 @@
                 @Html.Raw(Model.Description)
             </div>
 
-            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-primary">Details</a>
+            <a asp-action="Details" asp-route-id="@Model.ArticleId" class="btn btn-primary">Details</a>
 
         </div>
         <div class="card-footer text-body-secondary">

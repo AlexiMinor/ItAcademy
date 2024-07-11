@@ -25,11 +25,13 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Riok.Mapperly" Version="3.6.0" />
     <PackageReference Include="Serilog" Version="4.0.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ItAcademy.DTOs\ItAcademy.DTOs.csproj" />
     <ProjectReference Include="..\ItAcademy.Services\ItAcademy.Services.csproj" />
   </ItemGroup>
 

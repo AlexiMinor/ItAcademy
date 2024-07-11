@@ -12,4 +12,7 @@ public class Article
 
     public Guid SourceId { get; set; }
     public Source Source { get; set; }
+    
+
+
 }

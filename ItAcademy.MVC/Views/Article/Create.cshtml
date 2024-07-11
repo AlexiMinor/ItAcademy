@@ -1,89 +1,84 @@
 ﻿@model ArticleModel
-
-<form asp-action="Create" asp-controller="Article" method="post">
-    <div>
-        <div>
-            <label asp-for="Id"></label>
-        </div>
-        <div>
-            <input required asp-for="Id" />
-        </div>
-        <div>
-            <span asp-validation-for="Id"></span>
-        </div>
+<h1>
+    Create Article
+</h1>
+<form asp-action="Create" asp-controller="Article" method="post" class="row">
+    <div class="mb-2 col-12 col-lg-7">
+            <label class="form-label"asp-for="ArticleId"></label>
+            <input class="form-control" required asp-for="ArticleId" />
+            <span asp-validation-for="ArticleId"></span>
     </div>
-    <div>
+    <div class="mb-2 col-12 col-lg-7">
         <div>
-            <label asp-for="Title"></label>
+            <label class="form-label"asp-for="Title"></label>
         </div>
         <div>
-            <input asp-for="Title" />
+            <input class="form-control" asp-for="Title" />
         </div>
         <div>
             <span asp-validation-for="Title"></span>
         </div>
     </div>
-    <div>
-
+    <div class="mb-2 col-12 col-lg-7">
         <div>
-            <label asp-for="Description"></label>
+            <label class="form-label"asp-for="Description"></label>
         </div>
         <div>
-            <textarea asp-for="Description"></textarea>
+            <textarea class="form-control" rows="3" asp-for="Description"></textarea>
         </div>
         <div>
             <span asp-validation-for="Description"></span>
         </div>
     </div>
-    <div>
+    <div class="mb-2 col-12 col-lg-7">
         <div>
-            <label asp-for="Text"></label>
+            <label class="form-label"asp-for="Text"></label>
         </div>
         <div>
-            <textarea asp-for="Text"></textarea>
+            <textarea class="form-control" rows="3" asp-for="Text"></textarea>
         </div>
         <div>
             <span asp-validation-for="Text"></span>
         </div>
-
     </div>
-    <div>
+    <div class="mb-2 col-12 col-lg-7">
         <div>
-            <label asp-for="PublicationDate"></label>
+            <label class="form-label"asp-for="PublicationDate"></label>
         </div>
         <div>
-            <input id="pub-date" class="m121212121" asp-for="PublicationDate" type="datetime" />
+            <input class="form-control" id="pub-date" class="m121212121" asp-for="PublicationDate" type="datetime" />
         </div>
         <div>
             <span asp-validation-for="PublicationDate"></span>
         </div>
     </div>
-    <div>
+    <div class="mb-2 col-12 col-lg-7">
         <div>
-
-            <label asp-for="Rate"></label>
+            <label class="form-label"asp-for="Rate"></label>
         </div>
         <div>
-            <input asp-for="Rate" type="number" />
+            <input class="form-control" asp-for="Rate" type="number" />
         </div>
         <div>
             <span asp-validation-for="Rate"></span>
         </div>
     </div>
-    <div>
+    <div class="mb-2 col-12 col-lg-7">
         <div>
-            <label asp-for="SourceName"></label>
+            <label class="form-label"asp-for="SourceName"></label>
         </div>
         <div>
-            <input asp-for="SourceName" />
+            <input class="form-control" asp-for="SourceName" />
         </div>
         <div>
             <span asp-validation-for="SourceName"></span>
         </div>
 
     </div>
-    <div>
-        <button class="btn btn-primary">Submit</button>
+    <div class="mb-2 col-12 col-lg-7">
+        <div class="row">
+            <button class="btn btn-primary col">Submit</button>
+        </div>
     </div>
 </form>
 

@@ -6,7 +6,7 @@
             <h5 class="card-title">@Model.Title</h5>
             <p class="card-text">@Model.Description</p>
 
-            <a asp-controller="Article" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-primary">Go somewhere</a>
+            <a asp-controller="Article" asp-action="Details" asp-route-id="@Model.ArticleId" class="btn btn-primary">Go somewhere</a>
         </div>
         <div class="card-footer text-body-secondary">
             by @Model.SourceName at @Model.PublicationDate

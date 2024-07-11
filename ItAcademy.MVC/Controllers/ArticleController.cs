@@ -1,5 +1,6 @@
 ﻿using ItAcademy.Database.Entities;
 using ItAcademy.MVC.Filters;
+using ItAcademy.MVC.Mappers;
 using ItAcademy.MVC.Models;
 using ItAcademy.Services.Abstractions;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,6 @@ public class ArticleController : Controller
     private readonly IArticleService _articleService;
     private readonly IConfiguration _configuration;
     private readonly ILogger<ArticleController> _logger;
-
     public ArticleController(IArticleService articleService,
         IConfiguration configuration, ILogger<ArticleController> logger)
     {
@@ -26,18 +26,10 @@ public class ArticleController : Controller
     {
         try
         {
-            var articles = (await _articleService.GetArticlesAsync()) //get all from db
-                .OrderBy(article => article.Title) //order by title
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)// take up to pagesize 
-                .Select(ConvertArticleToArticleModel)
-                .ToArray();
-
-            //5 articles
-            //5/3 = 1
-
             var articlesCount = await _articleService.GetArticlesCountAsync();
-
+            var articles = (await _articleService.GetArticlesAsync(pageSize, pageNumber)) //get all from db
+                .Select(ArticleMapper.ArticleToArticleDto)//todo improve by adding IQueryable to mapper
+                .ToArray();
             var pagination = new PaginationModel()
             {
                 PageSize = pageSize,
@@ -49,7 +41,7 @@ public class ArticleController : Controller
 
             var model = new ArticleWithVisitorsModel()
             {
-                Articles = articles,
+                Articles = articles.Select(ArticleMapper.ArticleDtoToArticleModel).ToArray(),
                 Pagination = pagination
             };
 
@@ -58,7 +50,7 @@ public class ArticleController : Controller
         catch (Exception e)
         {
             _logger.LogError(e.Message);
-            throw;
+            //throw;
             return StatusCode(500, new { Message = e.Message });
         }
 
@@ -101,14 +93,14 @@ public class ArticleController : Controller
         return View(articles);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Edit(ArticleModel model)
-    {
-        //add to database
+    //[HttpPost]
+    //public async Task<IActionResult> Edit(ArticleModel model)
+    //{
+    //    //add to database
 
-        await _articleService.EditArticleAsync(ConvertArticleModelToArticle(model));
-        return RedirectToAction("Index");
-    }
+    //    await _articleService.EditArticleAsync(ConvertArticleModelToArticle(model));
+    //    return RedirectToAction("Index");
+    //}
 
     //show top 3 articles with the highest rating for week
     public async Task<IActionResult> TopArticles()
@@ -160,7 +152,7 @@ public class ArticleController : Controller
 
         var model = new ArticleModel()
         {
-            Id = article.Id,
+            ArticleId = article.Id,
             Description = article.Description,
             Text = article.Text,
             Rate = article.Rate.GetValueOrDefault(),
@@ -169,7 +161,20 @@ public class ArticleController : Controller
             Title = article.Title
         };
         return model;
+    }
 
+    private static ArticleModel? ConvertArticleToArticleModel2(Article? article)
+    {
+        var model = new ArticleModel();
+        //rewrite method using reflection 
+        var properties = typeof(ArticleModel).GetProperties();
+        foreach (var property in properties)
+        {
+            var value = property.GetValue(article);
+            property.SetValue(model, value);
+        }
+     
+        return model;
     }
 
     private static Article? ConvertArticleModelToArticle(ArticleModel? article)
@@ -179,7 +184,7 @@ public class ArticleController : Controller
 
         var model = new Article()
         {
-            Id = article.Id,
+            Id = article.ArticleId,
             Description = article.Description,
             Text = article.Text,
             Rate = article.Rate,

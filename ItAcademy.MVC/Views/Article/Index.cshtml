@@ -6,16 +6,21 @@
 <h1>
     Articles
 </h1>
-<a asp-controller="Article" asp-action="TopArticles">Go to top</a>
-<a asp-action="Create" asp-controller="Article" class="btn btn-primary">Create</a>
-<a asp-action="Aggregate" asp-controller="Article" class="btn btn-primary">Aggregate</a>
+
+<div class="row g-2 mb-md-3">
+    <a class="btn btn-primary col-12 col-sm-12  offset-md-2 col-md-8 offset-lg-0 col-lg-3 mb-3" asp-controller="Article" asp-action="TopArticles">Go to top</a>
+    <a class="btn btn-primary col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-1 col-lg-3 mb-3" asp-action="Create" asp-controller="Article">Create</a>
+    <a class="btn btn-primary col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-1 col-lg-3 mb-3" asp-action="Aggregate" asp-controller="Article">Aggregate</a>
+</div>
 @if (Model.Articles.Any())
 {
-    foreach (var article in Model.Articles)
-    {
-        <partial name="_ArticleCardPreview" model="@article"/>
+    <div class="row">
+        @foreach (var article in Model.Articles)
+        {
+            <partial name="_ArticleCardPreview" model="@article" />
 
-    }
+            }
+    </div>
 }
 
 <pagination model="Model.Pagination"></pagination>

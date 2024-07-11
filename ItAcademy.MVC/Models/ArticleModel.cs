@@ -5,7 +5,7 @@ namespace ItAcademy.MVC.Models;
 public class ArticleModel
 {
     [Required]
-    public Guid Id { get; set; }
+    public Guid ArticleId { get; set; }
     [MinLength(3)]
     public string Title { get; set; }
     [MaxLength(1000)]

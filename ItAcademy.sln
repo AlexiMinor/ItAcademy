@@ -5,9 +5,15 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItAcademy.MVC", "ItAcademy.MVC\ItAcademy.MVC.csproj", "{0D940E73-F2CA-4216-8AC7-848DCD348D74}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItAcademy.Database", "ItAcademt.Database\ItAcademy.Database.csproj", "{C3C89BF5-33FC-4DB5-9459-D1922B85DCEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItAcademy.Database", "ItAcademt.Database\ItAcademy.Database.csproj", "{C3C89BF5-33FC-4DB5-9459-D1922B85DCEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItAcademy.Services", "ItAcademy.Services\ItAcademy.Services.csproj", "{64C8E75A-B44F-4306-925E-74372C639735}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItAcademy.Services", "ItAcademy.Services\ItAcademy.Services.csproj", "{64C8E75A-B44F-4306-925E-74372C639735}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ItAcademy.DTOs", "ItAcademy.DTOs\ItAcademy.DTOs.csproj", "{03CD182A-7CC8-40D9-AEF9-3785EF43F72B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{53E08865-7ED4-4900-90FB-902C28DF06E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ItAcademy.Services.Tests", "ItAcademy.Services.Tests\ItAcademy.Services.Tests.csproj", "{0A5C0C15-3AF9-429B-BDAB-AB579CB25619}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,9 +33,20 @@ Global
 		{64C8E75A-B44F-4306-925E-74372C639735}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64C8E75A-B44F-4306-925E-74372C639735}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64C8E75A-B44F-4306-925E-74372C639735}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03CD182A-7CC8-40D9-AEF9-3785EF43F72B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03CD182A-7CC8-40D9-AEF9-3785EF43F72B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03CD182A-7CC8-40D9-AEF9-3785EF43F72B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03CD182A-7CC8-40D9-AEF9-3785EF43F72B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A5C0C15-3AF9-429B-BDAB-AB579CB25619}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A5C0C15-3AF9-429B-BDAB-AB579CB25619}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A5C0C15-3AF9-429B-BDAB-AB579CB25619}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A5C0C15-3AF9-429B-BDAB-AB579CB25619}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0A5C0C15-3AF9-429B-BDAB-AB579CB25619} = {53E08865-7ED4-4900-90FB-902C28DF06E9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3C8D8A31-CFBC-4B1F-932C-3D6181713C58}

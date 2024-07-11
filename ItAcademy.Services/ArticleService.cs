@@ -20,19 +20,14 @@ public class ArticleService : IArticleService
         _context = context;
         _logger = logger;
     }
-    public async Task<Article?[]> GetArticlesAsync()
+    public async Task<Article?[]> GetArticlesAsync(int pageSize, int pageNumber)
     {
-        //try
-        //{
-            return await _context.Articles/*.Where(article => article!.Rate >= 1)*/.ToArrayAsync();
-        //}
-        //catch (Exception e)
-        //{
-        //    //log.error 
-        //    //try to connect to reserve db
-        //    // if no - exception
-        //}
-
+        return await _context.Articles
+                .OrderBy(article => article.Title) //order by title
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)// take up to pagesize 
+                .Include(article => article.Source)
+                .ToArrayAsync();
     }
 
     public async Task<Article?[]> GetTopAsync(int take)
@@ -55,18 +50,28 @@ public class ArticleService : IArticleService
         return await _context.SaveChangesAsync();
     }
 
-    public async Task<int> EditArticleAsync(Article updatedArticle)
+    public async Task<int> EditArticleAsync(Article updatedArticle, CancellationToken token)
     {
         //not real implementation
         var article = await GetArticleByIdAsync(updatedArticle.Id);
         article.Text = updatedArticle.Text;
         article.PublicationDate = DateTime.Now;
-        return await _context.SaveChangesAsync();
+        return await _context.SaveChangesAsync(token);
     }
 
     public async Task<int> GetArticlesCountAsync()
     {
         return await _context.Articles.CountAsync();
+    }
+
+    public async Task SetRateAsync(Guid id, double? newRate, CancellationToken token)
+    {
+        var article = await _context.Articles.FirstOrDefaultAsync(a => a.Id == id, cancellationToken: token);
+        if (article != null)
+        {
+            article.Rate = newRate;
+            await _context.SaveChangesAsync(token);
+        }
     }
 
     public async Task AggregateAsync()
@@ -75,7 +80,6 @@ public class ArticleService : IArticleService
         sw.Start();
         try
         {
-            
             var sources = await _context.Sources
                 .Where(source => !string.IsNullOrEmpty(source.RssUrl))
                 .ToArrayAsync();
@@ -108,10 +112,7 @@ public class ArticleService : IArticleService
         //get id from sources in dbContext
         
         //await Task.WhenAll(tasks);
-
     }
-
-
 
     private async Task GetRssData(Source? source)
     {
