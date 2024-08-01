@@ -7,16 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
     <PackageReference Include="MediatR" Version="12.4.0" />
-    <PackageReference Include="System.ServiceModel.Syndication" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ItAcademt.Database\ItAcademy.Database.csproj" />
-    <ProjectReference Include="..\ItAcademy.Data.Repositories\ItAcademy.DataAccess.csproj" />
-    <ProjectReference Include="..\ItAcademy.DataAccess.CQS\ItAcademy.DataAccess.CQS.csproj" />
     <ProjectReference Include="..\ItAcademy.DTOs\ItAcademy.DTOs.csproj" />
+    <ProjectReference Include="..\ItAcademy.Mappers\ItAcademy.Mappers.csproj" />
   </ItemGroup>
 
 </Project>

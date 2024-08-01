@@ -1,8 +1,9 @@
 ﻿using ItAcademy.Database.Entities;
+using ItAcademy.Mappers;
 using ItAcademy.MVC.Filters;
-using ItAcademy.MVC.Mappers;
 using ItAcademy.MVC.Models;
 using ItAcademy.Services.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ItAcademy.MVC.Controllers;
@@ -27,9 +28,7 @@ public class ArticleController : Controller
         try
         {
             var articlesCount = await _articleService.GetArticlesCountAsync();
-            var articles = (await _articleService.GetArticlesAsync(pageSize, pageNumber)) //get all from db
-                .Select(ArticleMapper.ArticleToArticleDto)//todo improve by adding IQueryable to mapper
-                .ToArray();
+            var articles = await _articleService.GetArticlesAsync(pageSize, pageNumber);
             var pagination = new PaginationModel()
             {
                 PageSize = pageSize,
@@ -103,6 +102,7 @@ public class ArticleController : Controller
     //}
 
     //show top 3 articles with the highest rating for week
+    [Authorize(Roles = "User")]
     public async Task<IActionResult> TopArticles()
     {
         var articles = (await _articleService.GetTopAsync(3))
@@ -136,6 +136,7 @@ public class ArticleController : Controller
 
 
     [HttpGet]
+    [Authorize]
     //todo temp solution, will reworked after JS 
     public async Task<IActionResult> Aggregate()
     {
@@ -160,20 +161,6 @@ public class ArticleController : Controller
             SourceName = $"Source name {article.SourceId}",
             Title = article.Title
         };
-        return model;
-    }
-
-    private static ArticleModel? ConvertArticleToArticleModel2(Article? article)
-    {
-        var model = new ArticleModel();
-        //rewrite method using reflection 
-        var properties = typeof(ArticleModel).GetProperties();
-        foreach (var property in properties)
-        {
-            var value = property.GetValue(article);
-            property.SetValue(model, value);
-        }
-     
         return model;
     }
 

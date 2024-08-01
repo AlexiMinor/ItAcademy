@@ -1,6 +1,6 @@
 ﻿namespace ItAcademy.Database.Entities;
 
-public class Source
+public class Source : IEntity
 {
     public Guid Id { get; set; }
     public string Title { get; set; }

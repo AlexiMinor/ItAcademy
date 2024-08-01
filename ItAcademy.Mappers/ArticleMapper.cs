@@ -3,7 +3,7 @@ using ItAcademy.DTOs;
 using ItAcademy.MVC.Models;
 using Riok.Mapperly.Abstractions;
 
-namespace ItAcademy.MVC.Mappers;
+namespace ItAcademy.Mappers;
 
 [Mapper]
 public static partial class ArticleMapper
@@ -15,5 +15,7 @@ public static partial class ArticleMapper
     
    [MapProperty(nameof(ArticleDto.Id), nameof(ArticleModel.ArticleId))]
    public static partial ArticleModel? ArticleDtoToArticleModel(ArticleDto? articleDto);
+
+    public static partial Article? ArticleDtoToArticle(ArticleDto? articleDto);
 
 }

@@ -2,6 +2,7 @@ using ItAcademy.MVC.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using ItAcademy.MVC.Filters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ItAcademy.MVC.Controllers
 {
@@ -20,13 +21,14 @@ namespace ItAcademy.MVC.Controllers
         [TypeFilter(typeof(TestResourceFilter), Arguments = [12])]
         //[ServiceFilter(typeof(TestResourceFilter))]
         [ResultFilter]
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
             _logger.LogInformation("hello");
             return View();
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin, User")]
         [CacheResourceFilter]
         public IActionResult Privacy()
         {

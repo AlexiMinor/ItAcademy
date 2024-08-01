@@ -1,10 +1,16 @@
 ﻿using System.Diagnostics;
+using System.Numerics;
 using System.ServiceModel.Syndication;
 using System.Xml;
 using HtmlAgilityPack;
+using ItAcademy.DataAccess;
+using ItAcademy.DataAccess.CQS.Commands.Articles;
+using ItAcademy.DataAccess.CQS.Queries.Articles;
 using ItAcademy.Database;
 using ItAcademy.Database.Entities;
+using ItAcademy.DTOs;
 using ItAcademy.Services.Abstractions;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -14,20 +20,27 @@ public class ArticleService : IArticleService
 {
     private readonly ArticleAggregatorContext _context;
     private readonly ILogger<ArticleService> _logger;
-
-    public ArticleService(ArticleAggregatorContext context, ILogger<ArticleService> logger)
+    //50
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMediator _mediator;
+    public ArticleService(ArticleAggregatorContext context, 
+        ILogger<ArticleService> logger, IUnitOfWork unitOfWork, 
+        IMediator mediator)
     {
         _context = context;
         _logger = logger;
+      
+        _unitOfWork = unitOfWork;
+        _mediator = mediator;
     }
-    public async Task<Article?[]> GetArticlesAsync(int pageSize, int pageNumber)
+
+    public async Task<ArticleDto[]> GetArticlesAsync(int pageSize, int pageNumber, CancellationToken token = default)
     {
-        return await _context.Articles
-                .OrderBy(article => article.Title) //order by title
-                .Skip((pageNumber - 1) * pageSize)
-                .Take(pageSize)// take up to pagesize 
-                .Include(article => article.Source)
-                .ToArrayAsync();
+      return await _mediator.Send(new GetArticlesByPageNumberAndPageSizeQuery()
+        {
+            PageSize = pageSize,
+            PageNumber = pageNumber
+        }, token);
     }
 
     public async Task<Article?[]> GetTopAsync(int take)
@@ -40,13 +53,15 @@ public class ArticleService : IArticleService
 
     public async Task<Article?> GetArticleByIdAsync(Guid id)
     {
-        return await _context.Articles
-            .SingleOrDefaultAsync(article => article.Id.Equals(id));
+        return await _unitOfWork.Articles.GetById(id);
+        //return await _context.Articles
+        //    .SingleOrDefaultAsync(article => article.Id.Equals(id));
     }
 
     public async Task<int> AddArticleAsync(Article article)
     {
         await _context.Articles.AddAsync(article);
+        //_articleRepository.a
         return await _context.SaveChangesAsync();
     }
 
@@ -76,8 +91,6 @@ public class ArticleService : IArticleService
 
     public async Task AggregateAsync()
     {
-        var sw = new Stopwatch();
-        sw.Start();
         try
         {
             var sources = await _context.Sources
@@ -85,24 +98,16 @@ public class ArticleService : IArticleService
                 .ToArrayAsync();
 
             //var tasks = new List<Task>();
-            var sw1 = new Stopwatch();
-            sw1.Start();
             foreach (var s in sources)
             {
                 await GetRssData(s);
             }
-            sw1.Stop();
-            
             var articles = await GetArticlesInfoWithoutText();
 
-            var sw2 = new Stopwatch();
-            sw2.Start();
             foreach (var article in articles)
             {
                 await UpdateText(article);
             }
-            sw2.Stop();
-            sw.Stop();
         }
         catch (Exception e)
         {
@@ -114,17 +119,15 @@ public class ArticleService : IArticleService
         //await Task.WhenAll(tasks);
     }
 
-    private async Task GetRssData(Source? source)
+    private async Task GetRssData(Source? source, CancellationToken token = default)
     {
         if (source?.RssUrl != null)
             using (var xmlReader = XmlReader.Create(source.RssUrl))
             {
                 var syndicationFeed = SyndicationFeed.Load(xmlReader);
-                var existedArticleUrls = await _context.Articles
-                    .Select(article => article.OriginalUrl)
-                    .ToArrayAsync();
+            
                 var articles = syndicationFeed.Items
-                    .Select(it => new Article()
+                    .Select(it => new ArticleDto()
                     {
                         Id = Guid.NewGuid(),
                         Title = it.Title.Text,
@@ -134,13 +137,12 @@ public class ArticleService : IArticleService
                         SourceId = source.Id
                     }
                 ).ToArray();
-
-                var newUniqueArticles = articles
-                    .Where(article => !existedArticleUrls.Contains(article.OriginalUrl))
-                    .ToArray();
                 
-                await _context.Articles.AddRangeAsync(newUniqueArticles);
-                await _context.SaveChangesAsync();
+                await _mediator.Send(
+                    new InsertUniqueArticlesFromRssDataCommand()
+                    {
+                        Articles = articles
+                    }, token);
             }
     }
 
@@ -165,5 +167,18 @@ public class ArticleService : IArticleService
                 await _context.SaveChangesAsync();
             }
         }
+    }
+
+    private async Task Test()
+    {
+        var article = new Article() { /*some data*/};
+        var source = new Source() { /*some data*/ };
+        var ct = new CancellationToken();
+
+        await _unitOfWork.Articles.Add(article, ct);
+        await _unitOfWork.Sources.Add(source, ct);
+        await _unitOfWork.Commit(ct);
+        //add to some more repositories
+
     }
 }

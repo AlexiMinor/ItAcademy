@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.4.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.5">
       <PrivateAssets>all</PrivateAssets>
@@ -31,8 +32,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ItAcademy.DataAccess.CQS\ItAcademy.DataAccess.CQS.csproj" />
     <ProjectReference Include="..\ItAcademy.DTOs\ItAcademy.DTOs.csproj" />
+    <ProjectReference Include="..\ItAcademy.Mappers\ItAcademy.Mappers.csproj" />
+    <ProjectReference Include="..\ItAcademy.MVC.Models\ItAcademy.MVC.Models.csproj" />
     <ProjectReference Include="..\ItAcademy.Services\ItAcademy.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Mappers\" />
   </ItemGroup>
 
 </Project>
