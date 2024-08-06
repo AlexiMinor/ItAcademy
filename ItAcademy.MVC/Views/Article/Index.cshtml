@@ -9,11 +9,22 @@
 
 <div class="row g-2 mb-md-3">
     <a class="btn btn-primary col-12 col-sm-12  offset-md-2 col-md-8 offset-lg-0 col-lg-3 mb-3" asp-controller="Article" asp-action="TopArticles">Go to top</a>
-    <a class="btn btn-primary col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-1 col-lg-3 mb-3" asp-action="Create" asp-controller="Article">Create</a>
-    <a class="btn btn-primary col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-1 col-lg-3 mb-3" asp-action="Aggregate" asp-controller="Article">Aggregate</a>
+    <a class="btn btn-primary col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-0 col-lg-3 mb-3" id="create-btn" asp-action="Create" asp-controller="Article">Create</a>
+    <a class="btn btn-primary col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-0 col-lg-3 mb-3" asp-action="Aggregate" asp-controller="Article">Aggregate</a>
+    <button class="btn btn-primary col-12 col-sm-12 offset-md-2 col-md-8 offset-lg-0 col-lg-3 mb-3" onclick="findImages">Adapt pictures</button>
+</div>
+
+<div class="row mb-3">
+    <div class="col-12">
+    <label for="article-search-autocomplete" class="form-label">Find Article</label>
+    <input class="form-control" list="article-search" id="article-search-autocomplete" placeholder="Type to search...">
+    <datalist id="article-search">
+    </datalist>
+    </div>
 </div>
 @if (Model.Articles.Any())
 {
+    @* <div class="card-group"> *@
     <div class="row">
         @foreach (var article in Model.Articles)
         {
@@ -24,3 +35,10 @@
 }
 
 <pagination model="Model.Pagination"></pagination>
+
+
+@section Scripts
+{
+    <script src="~/js/site.js" asp-append-version="true"></script> 
+    <script src="~/js/article-search.js" asp-append-version="true"></script> 
+}

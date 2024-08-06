@@ -43,4 +43,11 @@
     <Folder Include="Mappers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\js\site-functions.js">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

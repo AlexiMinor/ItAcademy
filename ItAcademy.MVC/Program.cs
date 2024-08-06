@@ -67,7 +67,7 @@ namespace ItAcademy.MVC
             builder.Services.AddScoped<ITestService, TestService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddMediatR(cfg => {
-                cfg.RegisterServicesFromAssembly(typeof(InsertUniqueArticlesFromRssDataCommand).Assembly);
+                cfg.RegisterServicesFromAssembly(typeof( InsertUniqueArticlesFromRssDataCommand).Assembly);
             });
 
 

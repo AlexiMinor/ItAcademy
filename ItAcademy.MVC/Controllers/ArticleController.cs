@@ -144,6 +144,20 @@ public class ArticleController : Controller
         return Ok();
     }
 
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetArticleTitles([FromBody]SearchArticleModel model)
+    {
+        var titles = new List<string>()
+        {
+            $"{model.Title} - 1",
+            $"{model.Title} - 2",
+            $"{model.Title} - 3",
+            $"{model.Title} - 4",
+        };
+        
+        return Ok(titles);
+    }
     //shouldn't be implemented in that way. Temp code, should be rewritten later
     //get projection
     private static ArticleModel? ConvertArticleToArticleModel(Article? article)
