@@ -87,7 +87,7 @@ public class ArticleController : Controller
     public async Task<IActionResult> Edit(Guid id)
     {
         var articles = ConvertArticleToArticleModel
-            (await _articleService.GetArticleByIdAsync(id));
+            (new Article());
 
         return View(articles);
     }
@@ -115,8 +115,9 @@ public class ArticleController : Controller
     [CheckId]
     public async Task<IActionResult> Details([FromRoute] Guid id, string str)
     {
-        var article = ConvertArticleToArticleModel(
-            await _articleService.GetArticleByIdAsync(id));
+        var article = new ArticleModel(); 
+        //ConvertArticleToArticleModel(
+        //    await _articleService.GetArticleByIdAsync(id));
         if (article != null)
         {
             //_configuration.GetReloadToken().

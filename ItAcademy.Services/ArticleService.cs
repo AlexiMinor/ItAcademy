@@ -9,6 +9,7 @@ using ItAcademy.DataAccess.CQS.Queries.Articles;
 using ItAcademy.Database;
 using ItAcademy.Database.Entities;
 using ItAcademy.DTOs;
+using ItAcademy.Mappers;
 using ItAcademy.Services.Abstractions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -51,14 +52,17 @@ public class ArticleService : IArticleService
             .ToArrayAsync();
     }
 
-    public async Task<Article?> GetArticleByIdAsync(Guid id)
+    public async Task<ArticleDto?> GetArticleByIdAsync(Guid id)
     {
-        return await _unitOfWork.Articles.GetById(id);
-        //return await _context.Articles
-        //    .SingleOrDefaultAsync(article => article.Id.Equals(id));
+        var article = await _mediator.Send(new GetArticleByIdQuery()
+        {
+            Id = id
+        });
+        
+        return ArticleMapper.ArticleToArticleDto(article);
     }
 
-    public async Task<int> AddArticleAsync(Article article)
+    public async Task<int> AddArticleAsync(Article? article)
     {
         await _context.Articles.AddAsync(article);
         //_articleRepository.a
@@ -146,12 +150,12 @@ public class ArticleService : IArticleService
             }
     }
 
-    private async Task<Article[]> GetArticlesInfoWithoutText()
+    private async Task<Article?[]> GetArticlesInfoWithoutText()
     {
         return await _context.Articles.Where(article=>string.IsNullOrEmpty(article.Text)).ToArrayAsync();
     }
 
-    private async Task UpdateText(Article article)
+    private async Task UpdateText(Article? article)
     {
         var web = new HtmlWeb();
         var doc = web.Load(article.OriginalUrl);

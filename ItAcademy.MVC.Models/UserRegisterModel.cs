@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ItAcademy.MVC.Models;
+namespace ItAcademy.PL.Models;
 
 public class UserRegisterModel
 {

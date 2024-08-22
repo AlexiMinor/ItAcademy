@@ -35,7 +35,7 @@
     <ProjectReference Include="..\ItAcademy.DataAccess.CQS\ItAcademy.DataAccess.CQS.csproj" />
     <ProjectReference Include="..\ItAcademy.DTOs\ItAcademy.DTOs.csproj" />
     <ProjectReference Include="..\ItAcademy.Mappers\ItAcademy.Mappers.csproj" />
-    <ProjectReference Include="..\ItAcademy.MVC.Models\ItAcademy.MVC.Models.csproj" />
+    <ProjectReference Include="..\ItAcademy.MVC.Models\ItAcademy.PL.Models.csproj" />
     <ProjectReference Include="..\ItAcademy.Services\ItAcademy.Services.csproj" />
   </ItemGroup>
 

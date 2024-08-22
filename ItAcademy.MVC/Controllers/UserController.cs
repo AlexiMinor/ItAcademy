@@ -2,6 +2,7 @@
 using ItAcademy.Database;
 using ItAcademy.Database.Entities;
 using ItAcademy.MVC.Models;
+using ItAcademy.PL.Models;
 using ItAcademy.Services.Abstractions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

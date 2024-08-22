@@ -13,7 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ItAcademt.Database\ItAcademy.Database.csproj" />
     <ProjectReference Include="..\ItAcademy.DTOs\ItAcademy.DTOs.csproj" />
-    <ProjectReference Include="..\ItAcademy.MVC.Models\ItAcademy.MVC.Models.csproj" />
+    <ProjectReference Include="..\ItAcademy.MVC.Models\ItAcademy.PL.Models.csproj" />
   </ItemGroup>
 
 </Project>

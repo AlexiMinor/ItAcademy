@@ -1,4 +1,5 @@
 using ItAcademy.Database.Entities;
+using ItAcademy.Mappers;
 using ItAcademy.Services.Abstractions;
 using NSubstitute;
 
@@ -37,7 +38,7 @@ namespace ItAcademy.Services.Tests
             articleServiceMock.GetArticleByIdAsync(articleId)
                 .ReturnsForAnyArgs(
                     Task.FromResult(
-                        _articles.FirstOrDefault(article => article.Id.Equals(articleId))));
+                        ArticleMapper.ArticleToArticleDto(_articles.FirstOrDefault(article => article.Id.Equals(articleId)))));
 
             //add substitute logic for articleServiceMock.SetRateAsync by update value from listArticle
             articleServiceMock

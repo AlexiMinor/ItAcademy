@@ -1,9 +1,12 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
+using ItAcademy.DataAccess.CQS.Queries.User;
 using ItAcademy.Database;
 using ItAcademy.Database.Entities;
+using ItAcademy.DTOs;
 using ItAcademy.Services.Abstractions;
 using ItAcademy.Services.Abstractions.Test;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ItAcademy.Services;
@@ -11,10 +14,12 @@ namespace ItAcademy.Services;
 public class UserService : IUserService
 {
     private readonly ArticleAggregatorContext _context;
+    private readonly IMediator _mediator;
 
-    public UserService(ArticleAggregatorContext context)
+    public UserService(ArticleAggregatorContext context, IMediator mediator)
     {
         _context = context;
+        _mediator = mediator;
     }
 
     public async Task RegisterUserAsync(string email, string password, CancellationToken token)
@@ -87,5 +92,15 @@ public class UserService : IUserService
                 cancellationToken: token))?.Role.Name;
 
         return userRole;
+    }
+
+    public async Task<Guid?> GetUserIdByEmailAsync(string modelEmail, CancellationToken cancellationToken)
+    {
+        return await _mediator.Send(new GetUserIdByEmailQuery() { Email = modelEmail }, cancellationToken);
+    }
+
+    public async Task<UserTokenDto> GetUserDataByRefreshToken(Guid id, CancellationToken cancellationToken)
+    {
+      return  await _mediator.Send(new GetUserDataByRefreshTokenQuery() { ToklenId = id }, cancellationToken);
     }
 }

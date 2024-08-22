@@ -7,8 +7,8 @@ public interface IArticleService
 {
     Task<ArticleDto[]> GetArticlesAsync(int pageSize, int pageNumber, CancellationToken token = default);
     Task<Article?[]> GetTopAsync(int take);
-    Task<Article?> GetArticleByIdAsync(Guid id);
-    Task<int> AddArticleAsync(Article article);
+    Task<ArticleDto?> GetArticleByIdAsync(Guid id);
+    Task<int> AddArticleAsync(Article? article);
     Task<int> EditArticleAsync(Article updatedArticle, CancellationToken token = default);
     Task<int> GetArticlesCountAsync();
     Task AggregateAsync();

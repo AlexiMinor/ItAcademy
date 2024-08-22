@@ -1,19 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace ItAcademy.Database.Migrations
 {
     /// <inheritdoc />
-    public partial class SourcesRss : Migration
+    public partial class RTExpire : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "RssUrl",
-                table: "Sources",
-                type: "nvarchar(max)",
+            migrationBuilder.AddColumn<DateTime>(
+                name: "ExpireDateTime",
+                table: "RefreshTokens",
+                type: "datetime2",
                 nullable: true);
         }
 
@@ -21,8 +22,8 @@ namespace ItAcademy.Database.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "RssUrl",
-                table: "Sources");
+                name: "ExpireDateTime",
+                table: "RefreshTokens");
         }
     }
 }

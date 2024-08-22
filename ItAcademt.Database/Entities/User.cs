@@ -9,4 +9,6 @@ public class User : IEntity
     
     public Guid RoleId { get; set; }
     public Role Role { get; set; }
+    
+    public List<RefreshToken> RefreshTokens { get; set; }
 }
