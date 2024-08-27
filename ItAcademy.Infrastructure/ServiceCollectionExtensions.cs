@@ -43,7 +43,5 @@ namespace ItAcademy.Infrastructure
 
             return services;
         }
-        
-        
     }
 }

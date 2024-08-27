@@ -24,23 +24,23 @@ public class TokenController : ControllerBase
         _tokenService = tokenService;
     }
 
+    //todo add model for refreshToken
     [HttpPost("/refresh/")]
-    public async Task<IActionResult> Refresh([FromBody] Guid id,
+    public async Task<IActionResult> Refresh([FromBody] Guid refreshToken,
         CancellationToken cancellationToken = default)
     {
-        
-        if (await _tokenService.RefreshTokenCorrect(id, cancellationToken))
+        if (await _tokenService.RefreshTokenCorrect(refreshToken, cancellationToken))
         {
-            var user = await _userService.GetUserDataByRefreshToken(id, cancellationToken);
+            var user = await _userService.GetUserDataByRefreshToken(refreshToken, cancellationToken);
             if (user != null)
             {
                 var data = await GenerateTokenPair(user.Id, user.RoleName);
-                await _tokenService.RevokeToken(id);
+                
+                await _tokenService.RemoveToken(refreshToken); //todo need to be implemented
+                
                 return Ok(new { AccessToken = data.Item1, refreshToken = data.Item2});
 
             }
-
-
         }
         return NotFound();
     }
@@ -64,8 +64,8 @@ public class TokenController : ControllerBase
         }
 
         var data = await GenerateTokenPair(userId.Value, userRole);
-
-        return Ok(new { AccessToken = data.Item1, refreshToken = data.Item2});
+        
+        return Ok(new { AccessToken = data.Item1, RefreshToken = data.Item2});
 
     }
 
@@ -73,6 +73,7 @@ public class TokenController : ControllerBase
     public async Task<IActionResult> Revoke(Guid id,
         CancellationToken cancellationToken = default)
     {
+        //set IsRevoked true for refreshToken 
         return NotFound();
     }
 

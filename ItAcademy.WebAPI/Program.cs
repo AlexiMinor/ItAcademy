@@ -1,12 +1,15 @@
 
 using System.Reflection;
 using System.Text;
+using Hangfire;
 using ItAcademy.Database;
 using ItAcademy.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using Serilog.Events;
 
 namespace ItAcademy.WebAPI
 {
@@ -14,6 +17,12 @@ namespace ItAcademy.WebAPI
     {
         public static void Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Override("Microsoft.AspNetCore", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.Console()
+                .WriteTo.File("log.log").CreateLogger();
+            
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
@@ -77,13 +86,25 @@ namespace ItAcademy.WebAPI
             builder.Services.RegisterArticleAggregatorUnitOfWork();
             builder.Services.RegisterArticleAggregatorServices();
             builder.Services.RegisterArticleAggregatorMediatr();
-
+                 builder.Services.AddSerilog((services, lc) => lc
+                .ReadFrom.Configuration(builder.Configuration)
+                .ReadFrom.Services(services)
+                .Enrich.FromLogContext()
+                .WriteTo.Console(LogEventLevel.Error)
+                .WriteTo.File("log.log"));
             builder.Services.AddMemoryCache();
             //(options =>
             //{
             //    options.
             //    options.SizeLimit = 
             //});
+            builder.Services.AddHangfire(conf => conf
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(builder.Configuration.GetConnectionString("Default")));
+            builder.Services.AddHangfireServer();
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -98,10 +119,17 @@ namespace ItAcademy.WebAPI
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseHangfireDashboard();
 
             app.MapControllers();
 
             app.Run();
+        }
+
+
+        private async Task AddRecurringJobs()
+        {
+            
         }
     }
 }

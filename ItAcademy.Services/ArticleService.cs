@@ -110,7 +110,7 @@ public class ArticleService : IArticleService
 
             foreach (var article in articles)
             {
-                await UpdateText(article);
+                await UpdateTextByWebScrapping(article);
             }
         }
         catch (Exception e)
@@ -155,7 +155,7 @@ public class ArticleService : IArticleService
         return await _context.Articles.Where(article=>string.IsNullOrEmpty(article.Text)).ToArrayAsync();
     }
 
-    private async Task UpdateText(Article? article)
+    private async Task UpdateTextByWebScrapping(Article? article)
     {
         var web = new HtmlWeb();
         var doc = web.Load(article.OriginalUrl);

@@ -86,4 +86,8 @@ public class TokenService : ITokenService
             is { IsRevoked: false } 
                && (rToken.ExpireDateTime <= DateTime.UtcNow || rToken.ExpireDateTime == null);
     }
+
+    public async Task RemoveToken(Guid id)
+    {
+    }
 }
