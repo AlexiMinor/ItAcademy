@@ -1,0 +1,16 @@
+<div class="article-card" *ngIf="article">
+  <!-- *ngIf="article.rate && article.rate > 0"  -->
+  <div class="article-content">
+    <h2 class="article-header">{{ article.title | uppercase }}</h2>
+    <p>
+      {{ article.description }}
+    </p>
+    <span *ngIf="article.rate">Rate: {{ article.rate }}</span>
+    <h6 *ngIf="article.sourceName">{{ article.sourceName }}</h6>
+
+    <div class="card-actions">
+      <button routerLink="/article/{{article.articleId}}" class="card-action-btn">Read</button>
+      <!--  (click)="selectArticle(article)"-->
+    </div>
+  </div>
+</div>
